@@ -170,6 +170,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Products` (
   `sku` VARCHAR(100) NOT NULL,
   `name` VARCHAR(190) NOT NULL,
   `description` VARCHAR(255) NULL DEFAULT NULL,
+  `Active` BIT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `product_business_id` (`business_id` ASC, `sku` ASC) VISIBLE,
   INDEX `product_category_id` (`category_id` ASC) VISIBLE,
@@ -285,6 +286,8 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`CashDrawerSessions` (
   `closing_amount` DECIMAL(14,2) NULL DEFAULT NULL,
   `opened_at` DATETIME NOT NULL,
   `closed_at` DATETIME NULL DEFAULT NULL,
+  `variance_amount` DECIMAL(14,2) NOT NULL,
+  `notes` VARCHAR(200) NULL,
   PRIMARY KEY (`id`),
   INDEX `CDS_shift_id` (`shift_id` ASC) VISIBLE,
   CONSTRAINT `CDS_shift_id`
@@ -311,19 +314,20 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `Merkadit`.`Zones`
+-- Table `Merkadit`.`Floors`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Zones` ;
+DROP TABLE IF EXISTS `Merkadit`.`Floors` ;
 
-CREATE TABLE IF NOT EXISTS `Merkadit`.`Zones` (
+CREATE TABLE IF NOT EXISTS `Merkadit`.`Floors` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `floor_id` BIGINT NOT NULL,
-  `name` VARCHAR(120) NOT NULL,
+  `building_id` BIGINT NOT NULL,
+  `level_number` INT NOT NULL,
+  `name` VARCHAR(100) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `Zones_floor_id` (`floor_id` ASC, `name` ASC) VISIBLE,
-  CONSTRAINT `Zones_floor_id`
-    FOREIGN KEY (`floor_id`)
-    REFERENCES `Merkadit`.`Zones` (`id`))
+  UNIQUE INDEX `Zones_building_id` (`building_id` ASC, `level_number` ASC) VISIBLE,
+  CONSTRAINT `Zones_building_id`
+    FOREIGN KEY (`building_id`)
+    REFERENCES `Merkadit`.`Buildings` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -372,7 +376,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Zones` (
   UNIQUE INDEX `Zones_floor_id` (`floor_id` ASC, `name` ASC) VISIBLE,
   CONSTRAINT `Zones_floor_id`
     FOREIGN KEY (`floor_id`)
-    REFERENCES `Merkadit`.`Zones` (`id`))
+    REFERENCES `Merkadit`.`Floors` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -404,7 +408,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`StoreSpaces` (
     REFERENCES `Merkadit`.`Buildings` (`id`),
   CONSTRAINT `StoreSpaces_floor_id`
     FOREIGN KEY (`floor_id`)
-    REFERENCES `Merkadit`.`Zones` (`id`),
+    REFERENCES `Merkadit`.`Floors` (`id`),
   CONSTRAINT `StoreSpaces_space_status_id`
     FOREIGN KEY (`space_status_id`)
     REFERENCES `Merkadit`.`SpaceStatus` (`id`),
@@ -482,23 +486,6 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Customers` (
   `name` VARCHAR(190) NULL DEFAULT NULL,
   `email` VARCHAR(190) NULL DEFAULT NULL,
   `phone` VARCHAR(60) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `Merkadit`.`ErrorLog`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`ErrorLog` ;
-
-CREATE TABLE IF NOT EXISTS `Merkadit`.`ErrorLog` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `context` VARCHAR(120) NULL DEFAULT NULL,
-  `message` VARCHAR(255) NOT NULL,
-  `stacktrace` TEXT NULL DEFAULT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -742,6 +729,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`OperationLogs` (
   `success` TINYINT(1) NULL DEFAULT '1',
   `error_message` VARCHAR(255) NULL DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `stack_trace` TEXT NULL,
   PRIMARY KEY (`id`),
   INDEX `operation_name` (`operation_name` ASC, `created_at` ASC) VISIBLE,
   INDEX `user_id` (`user_id` ASC) VISIBLE,
@@ -1173,126 +1161,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `Merkadit`.`user`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`user` ;
-
-CREATE TABLE IF NOT EXISTS `Merkadit`.`user` (
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);
-
-
--- -----------------------------------------------------
--- Table `Merkadit`.`user_1`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`user_1` ;
-
-CREATE TABLE IF NOT EXISTS `Merkadit`.`user_1` (
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);
-
-
--- -----------------------------------------------------
--- Table `Merkadit`.`user_2`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`user_2` ;
-
-CREATE TABLE IF NOT EXISTS `Merkadit`.`user_2` (
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);
-
-
--- -----------------------------------------------------
--- Table `Merkadit`.`user_3`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`user_3` ;
-
-CREATE TABLE IF NOT EXISTS `Merkadit`.`user_3` (
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);
-
-
--- -----------------------------------------------------
--- Table `Merkadit`.`user_4`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`user_4` ;
-
-CREATE TABLE IF NOT EXISTS `Merkadit`.`user_4` (
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);
-
-
--- -----------------------------------------------------
--- Table `Merkadit`.`user_5`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`user_5` ;
-
-CREATE TABLE IF NOT EXISTS `Merkadit`.`user_5` (
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);
-
-
--- -----------------------------------------------------
--- Table `Merkadit`.`user_6`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`user_6` ;
-
-CREATE TABLE IF NOT EXISTS `Merkadit`.`user_6` (
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);
-
-
--- -----------------------------------------------------
--- Table `Merkadit`.`user_7`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`user_7` ;
-
-CREATE TABLE IF NOT EXISTS `Merkadit`.`user_7` (
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);
-
-
--- -----------------------------------------------------
--- Table `Merkadit`.`user_8`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`user_8` ;
-
-CREATE TABLE IF NOT EXISTS `Merkadit`.`user_8` (
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);
-
-
--- -----------------------------------------------------
--- Table `Merkadit`.`user_9`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`user_9` ;
-
-CREATE TABLE IF NOT EXISTS `Merkadit`.`user_9` (
-  `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);
-
-
--- -----------------------------------------------------
 -- Table `Merkadit`.`GeoAreas`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `Merkadit`.`GeoAreas` ;
@@ -1368,6 +1236,71 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`AddressLinks` (
   CONSTRAINT `AdressLinks_address_id`
     FOREIGN KEY (`address_id`)
     REFERENCES `Merkadit`.`Addresses` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Merkadit`.`DiscountTypes`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Merkadit`.`DiscountTypes` ;
+
+CREATE TABLE IF NOT EXISTS `Merkadit`.`DiscountTypes` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(30) NOT NULL,
+  `description` VARCHAR(255) NOT NULL,
+  `active` BIT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Merkadit`.`Discounts`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Merkadit`.`Discounts` ;
+
+CREATE TABLE IF NOT EXISTS `Merkadit`.`Discounts` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `Businesses_id` BIGINT NOT NULL,
+  `DiscountTypes_id` INT NOT NULL,
+  `code` VARCHAR(20) NULL,
+  `name` VARCHAR(30) NOT NULL,
+  `description` VARCHAR(255) NULL,
+  `discount_percentage` DECIMAL(5,2) NULL,
+  `discount_amount` DECIMAL(12,2) NULL,
+  `min_purchase_amount` DECIMAL(12,2) NULL,
+  `max_discount_amount` DECIMAL(12,2) NULL,
+  `valid_from` DATETIME NULL,
+  `max_uses_per_customer` INT NULL,
+  `active` BIT(1) NOT NULL DEFAULT 1,
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `SaleLines_id` BIGINT NOT NULL,
+  `Sales_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_Discounts_Businesses1_idx` (`Businesses_id` ASC) VISIBLE,
+  INDEX `fk_Discounts_DiscountTypes1_idx` (`DiscountTypes_id` ASC) VISIBLE,
+  INDEX `fk_Discounts_SaleLines1_idx` (`SaleLines_id` ASC) VISIBLE,
+  INDEX `fk_Discounts_Sales1_idx` (`Sales_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Discounts_Businesses1`
+    FOREIGN KEY (`Businesses_id`)
+    REFERENCES `Merkadit`.`Businesses` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Discounts_DiscountTypes1`
+    FOREIGN KEY (`DiscountTypes_id`)
+    REFERENCES `Merkadit`.`DiscountTypes` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Discounts_SaleLines1`
+    FOREIGN KEY (`SaleLines_id`)
+    REFERENCES `Merkadit`.`SaleLines` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Discounts_Sales1`
+    FOREIGN KEY (`Sales_id`)
+    REFERENCES `Merkadit`.`Sales` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
