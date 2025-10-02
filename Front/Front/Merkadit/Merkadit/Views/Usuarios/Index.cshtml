@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Merkadit.Models.UserAccounts>
+
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+}
+
+<h2>Usuarios</h2>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Agregar Usuario</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Activo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            var rol = u.UserRoles?.FirstOrDefault()?.Role?.name ?? "Sin Rol";
+            <tr>
+                <td>@u.full_name</td>
+                <td>@u.email</td>
+                <td>@u.username</td>
+                <td>@rol</td>
+                <td>@(u.is_active ? "Sí" : "No")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@u.Id" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@u.Id" class="btn btn-danger btn-sm">Desactivar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,33 @@
+﻿@using System.Security.Claims;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    @if (User.Identity!.IsAuthenticated)
+    {
+        <h1 class="display-4">
+            Bienvenido
+            @User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault()
+        </h1>
+
+        @* El boton solo es visible si el usuario es Admin *@
+        @if (ViewBag.EsAdmin)
+        {
+            <p>
+                <a asp-controller="Usuarios" asp-action="Index" class="btn btn-primary">Gestión de Usuarios</a>
+            </p>
+        }
+
+        <p>
+            <a asp-controller="Home" asp-action="Salir" class="btn btn-danger">Cerrar Sesión</a>
+        </p>
+    }
+    else
+    {
+        <h1 class="display-4">Welcome</h1>
+        <p>
+            <a asp-controller="Acceso" asp-action="Login" class="btn btn-success">Iniciar Sesión</a>
+        </p>
+    }
+</div>

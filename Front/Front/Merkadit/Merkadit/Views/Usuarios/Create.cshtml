@@ -1,0 +1,24 @@
+﻿@model Merkadit.ViewModels.UserAccountsVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Crear cuenta</h2>
+
+<form asp-action="Create" method="post">
+    <input class="form-control mb-3" placeholder="Nombre completo" asp-for="full_name" required />
+    <input class="form-control mb-3" placeholder="Usuario" asp-for="username" required />
+    <input class="form-control mb-3" placeholder="Correo electrónico" asp-for="email" type="email" required />
+    <input class="form-control mb-3" placeholder="Contraseña" asp-for="password_hash" type="password" required />
+    <input class="form-control mb-3" placeholder="Confirmar contraseña" asp-for="ConfirmarClave" type="password" required />
+
+    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+</form>
+
+@if (ViewData["Mensaje"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @ViewData["Mensaje"]
+    </div>
+}
