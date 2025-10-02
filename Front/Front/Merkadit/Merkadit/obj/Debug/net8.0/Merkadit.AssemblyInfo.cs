@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Merkadit")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b2d16e5667cefd85563ce58d076a0b7c3bc4adab")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1e4bb416c1f80c9fd52ee2d76104f0b446ba63a4")]
 [assembly: System.Reflection.AssemblyProductAttribute("Merkadit")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Merkadit")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,12 +1,37 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\jose1\\OneDrive\\Escritorio\\Trabajos\\Bases\\BD1-Case--1\\Front\\Front\\Merkadit\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C6618F69-C2AF-4C8A-826C-93CBC901DFC1}|Merkadit\\Merkadit.csproj|c:\\users\\jose1\\onedrive\\escritorio\\trabajos\\bases\\bd1-case--1\\front\\front\\merkadit\\merkadit\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C6618F69-C2AF-4C8A-826C-93CBC901DFC1}|Merkadit\\Merkadit.csproj|solutionrelative:merkadit\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\jose1\\OneDrive\\Escritorio\\Trabajos\\Bases\\BD1-Case--1\\Front\\Front\\Merkadit\\Merkadit\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Merkadit\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\jose1\\OneDrive\\Escritorio\\Trabajos\\Bases\\BD1-Case--1\\Front\\Front\\Merkadit\\Merkadit\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Merkadit\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAA8BAAAAAAAAAAAwwBgBAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-02T07:13:19.771Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

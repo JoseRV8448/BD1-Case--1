@@ -3,31 +3,298 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    @if (User.Identity!.IsAuthenticated)
-    {
-        <h1 class="display-4">
-            Bienvenido
-            @User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault()
-        </h1>
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 60px 20px;
+        border-radius: 15px;
+        margin-bottom: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
 
-        @* El boton solo es visible si el usuario es Admin *@
-        @if (ViewBag.EsAdmin)
-        {
-            <p>
-                <a asp-controller="Usuarios" asp-action="Index" class="btn btn-primary">Gestión de Usuarios</a>
-            </p>
+    .welcome-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+    .admin-dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+    }
+
+    .admin-card {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: 2px solid #f0f0f0;
+    }
+
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
         }
 
-        <p>
-            <a asp-controller="Home" asp-action="Salir" class="btn btn-danger">Cerrar Sesión</a>
-        </p>
+        .admin-card i {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .admin-card h4 {
+            margin: 15px 0 10px;
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .admin-card p {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+    .btn-custom {
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        border: none;
+    }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+    .btn-danger-custom {
+        background: #f56565;
+        color: white;
+    }
+
+        .btn-danger-custom:hover {
+            background: #e53e3e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 101, 101, 0.4);
+        }
+
+    .btn-success-custom {
+        background: #48bb78;
+        color: white;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .user-avatar {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 32px;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .badge-role {
+        background: #667eea;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+        margin-left: 10px;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+@if (User.Identity!.IsAuthenticated)
+{
+    var userName = User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+    var userInitial = !string.IsNullOrEmpty(userName) ? userName.Substring(0, 1).ToUpper() : "U";
+
+    <div class="hero-section text-center">
+        <div class="user-info">
+            <div class="user-avatar">@userInitial</div>
+            <div>
+                <h1 class="display-4 mb-0">¡Bienvenido, @userName!</h1>
+                @if (ViewBag.EsAdmin)
+                {
+                    <span class="badge-role">Administrador</span>
+                }
+            </div>
+        </div>
+        <p class="lead">Sistema de Gestión Merkadit</p>
+    </div>
+
+    @if (ViewBag.EsAdmin)
+    {
+        <div class="welcome-card">
+            <h2 class="text-center mb-4">Panel de Administración</h2>
+            <div class="admin-dashboard">
+
+                <div class="admin-card">
+                    <i class="fas fa-users"></i>
+                    <h4>Usuarios</h4>
+                    <p>Gestionar cuentas de usuario y permisos</p>
+                    <a asp-controller="Usuarios" asp-action="Index" class="btn btn-custom btn-primary-custom">
+                        <i class="fas fa-cog me-1"></i> Gestionar
+                    </a>
+                </div>
+
+                <div class="admin-card">
+                    <i class="fas fa-building"></i>
+                    <h4>Edificios</h4>
+                    <p>Administrar edificios y espacios físicos</p>
+                    <a asp-controller="Buildings" asp-action="Index" class="btn btn-custom btn-primary-custom">
+                        <i class="fas fa-cog me-1"></i> Gestionar
+                    </a>
+                </div>
+
+                <div class="admin-card">
+                    <i class="fas fa-store"></i>
+                    <h4>Locales</h4>
+                    <p>Gestionar espacios comerciales disponibles</p>
+                    <a asp-controller="StoreSpaces" asp-action="Index" class="btn btn-custom btn-primary-custom">
+                        <i class="fas fa-cog me-1"></i> Gestionar
+                    </a>
+                </div>
+
+                <div class="admin-card">
+                    <i class="fas fa-briefcase"></i>
+                    <h4>Negocios</h4>
+                    <p>Administrar negocios inquilinos</p>
+                    <a asp-controller="Businesses" asp-action="Index" class="btn btn-custom btn-primary-custom">
+                        <i class="fas fa-cog me-1"></i> Gestionar
+                    </a>
+                </div>
+
+                <div class="admin-card">
+                    <i class="fas fa-file-contract"></i>
+                    <h4>Contratos</h4>
+                    <p>Gestionar contratos de arrendamiento</p>
+                    <a asp-controller="Contracts" asp-action="Index" class="btn btn-custom btn-primary-custom">
+                        <i class="fas fa-cog me-1"></i> Gestionar
+                    </a>
+                </div>
+
+                <div class="admin-card">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h4>Ventas</h4>
+                    <p>Visualizar historial de ventas</p>
+                    <a asp-controller="Sales" asp-action="Index" class="btn btn-custom btn-primary-custom">
+                        <i class="fas fa-chart-line me-1"></i> Ver Reportes
+                    </a>
+                </div>
+
+                <div class="admin-card">
+                    <i class="fas fa-boxes"></i>
+                    <h4>Inventario</h4>
+                    <p>Control de inventario y productos</p>
+                    <a asp-controller="Inventory" asp-action="Index" class="btn btn-custom btn-primary-custom">
+                        <i class="fas fa-cog me-1"></i> Gestionar
+                    </a>
+                </div>
+
+                <div class="admin-card">
+                    <i class="fas fa-calculator"></i>
+                    <h4>Liquidaciones</h4>
+                    <p>Procesar liquidaciones mensuales</p>
+                    <a asp-controller="Settlements" asp-action="Index" class="btn btn-custom btn-primary-custom">
+                        <i class="fas fa-coins me-1"></i> Gestionar
+                    </a>
+                </div>
+
+                <div class="admin-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h4>Reportes</h4>
+                    <p>Reportes financieros y estadísticas</p>
+                    <a asp-controller="Reports" asp-action="Index" class="btn btn-custom btn-primary-custom">
+                        <i class="fas fa-file-pdf me-1"></i> Ver Reportes
+                    </a>
+                </div>
+
+            </div>
+        </div>
     }
     else
     {
-        <h1 class="display-4">Welcome</h1>
-        <p>
-            <a asp-controller="Acceso" asp-action="Login" class="btn btn-success">Iniciar Sesión</a>
-        </p>
+        <div class="welcome-card text-center">
+            <h3>Acceso como Inquilino</h3>
+            <p class="text-muted">Gestione su negocio desde aquí</p>
+            <div class="mt-4">
+                <a asp-controller="Tenant" asp-action="Dashboard" class="btn btn-custom btn-primary-custom me-2">
+                    <i class="fas fa-tachometer-alt me-1"></i> Mi Panel
+                </a>
+                <a asp-controller="Tenant" asp-action="Sales" class="btn btn-custom btn-primary-custom">
+                    <i class="fas fa-cash-register me-1"></i> Mis Ventas
+                </a>
+            </div>
+        </div>
     }
-</div>
+
+    <div class="text-center mt-4">
+        <a asp-controller="Home" asp-action="Salir" class="btn btn-custom btn-danger-custom">
+            <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
+        </a>
+    </div>
+}
+else
+{
+    <div class="hero-section text-center">
+        <h1 class="display-4">Bienvenido a Merkadit</h1>
+        <p class="lead">Sistema de Gestión de Mercados Gastronómicos y Retail</p>
+        <div class="mt-4">
+            <a asp-controller="Acceso" asp-action="Login" class="btn btn-custom btn-success-custom">
+                <i class="fas fa-sign-in-alt me-1"></i> Iniciar Sesión
+            </a>
+        </div>
+    </div>
+
+    <div class="welcome-card">
+        <div class="row text-center">
+            <div class="col-md-4 mb-3">
+                <i class="fas fa-store" style="font-size: 48px; color: #667eea;"></i>
+                <h4 class="mt-3">Gestión de Espacios</h4>
+                <p class="text-muted">Administre locales y contratos de forma eficiente</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <i class="fas fa-chart-line" style="font-size: 48px; color: #667eea;"></i>
+                <h4 class="mt-3">Reportes en Tiempo Real</h4>
+                <p class="text-muted">Visualice ventas y comisiones al instante</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <i class="fas fa-coins" style="font-size: 48px; color: #667eea;"></i>
+                <h4 class="mt-3">Control Financiero</h4>
+                <p class="text-muted">Gestione rentas, comisiones y liquidaciones</p>
+            </div>
+        </div>
+    </div>
+}
