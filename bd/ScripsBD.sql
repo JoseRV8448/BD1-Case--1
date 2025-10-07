@@ -5,9 +5,11 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
 -- Schema Merkadit
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `Merkadit` ;
 
 -- -----------------------------------------------------
 -- Schema Merkadit
@@ -18,8 +20,6 @@ USE `Merkadit` ;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`nv_countries`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`nv_countries` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`nv_countries` (
   `countryid` INT NOT NULL AUTO_INCREMENT,
   `countryname` VARCHAR(30) NOT NULL,
@@ -32,8 +32,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`nv_states`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`nv_states` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`nv_states` (
   `stateid` INT NOT NULL AUTO_INCREMENT,
   `statename` VARCHAR(30) NOT NULL,
@@ -51,8 +49,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`nv_cities`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`nv_cities` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`nv_cities` (
   `cityid` INT NOT NULL AUTO_INCREMENT,
   `cityname` VARCHAR(30) NOT NULL,
@@ -70,8 +66,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Addresses`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Addresses` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Addresses` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `address1` VARCHAR(60) NOT NULL,
@@ -93,8 +87,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`UserAccounts`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`UserAccounts` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`UserAccounts` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(100) NOT NULL,
@@ -108,6 +100,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`UserAccounts` (
   UNIQUE INDEX `username` (`username` ASC) VISIBLE,
   UNIQUE INDEX `email` (`email` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -115,8 +108,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Addresses_has_UserAccounts`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Addresses_has_UserAccounts` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Addresses_has_UserAccounts` (
   `Addressid` BIGINT NOT NULL,
   `UserAccountid` BIGINT NOT NULL,
@@ -140,8 +131,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`AuditTrails`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`AuditTrails` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`AuditTrails` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `table_name` VARCHAR(120) NOT NULL,
@@ -165,14 +154,13 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Brands`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Brands` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Brands` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(150) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -180,8 +168,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`BusinessTypes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`BusinessTypes` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`BusinessTypes` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(120) NOT NULL,
@@ -189,6 +175,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`BusinessTypes` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 10
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -196,8 +183,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Businesses`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Businesses` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Businesses` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `business_type_id` BIGINT NOT NULL,
@@ -216,6 +201,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Businesses` (
     FOREIGN KEY (`business_type_id`)
     REFERENCES `Merkadit`.`BusinessTypes` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 16
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -223,11 +209,11 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`ProductCategories`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`ProductCategories` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`ProductCategories` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(150) NOT NULL,
+  `created_at` DATETIME NOT NULL,
+  `deleted` TINYINT(1) NOT NULL DEFAULT '0',
   `parent_id` BIGINT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name` (`name` ASC, `parent_id` ASC) VISIBLE,
@@ -236,6 +222,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`ProductCategories` (
     FOREIGN KEY (`parent_id`)
     REFERENCES `Merkadit`.`ProductCategories` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -243,8 +230,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`UnitOfMeasure`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`UnitOfMeasure` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`UnitOfMeasure` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(30) NOT NULL,
@@ -252,6 +237,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`UnitOfMeasure` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `code` (`code` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 12
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -259,8 +245,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Products`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Products` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Products` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `business_id` BIGINT NOT NULL,
@@ -289,6 +273,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Products` (
     FOREIGN KEY (`uom_id`)
     REFERENCES `Merkadit`.`UnitOfMeasure` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -296,8 +281,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Barcodes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Barcodes` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Barcodes` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `product_id` BIGINT NOT NULL,
@@ -316,8 +299,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Marketplace`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Marketplace` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Marketplace` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `commercial_name` VARCHAR(100) NOT NULL,
@@ -331,6 +312,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Marketplace` (
   `deleted_at` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -338,8 +320,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Buildings`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Buildings` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Buildings` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(150) NOT NULL,
@@ -352,6 +332,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Buildings` (
     FOREIGN KEY (`marketPlace_id`)
     REFERENCES `Merkadit`.`Marketplace` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -359,14 +340,13 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`SpaceStatus`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`SpaceStatus` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`SpaceStatus` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -374,14 +354,13 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`SpaceTypes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`SpaceTypes` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`SpaceTypes` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 10
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -389,8 +368,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`StoreSpaces`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`StoreSpaces` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`StoreSpaces` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `building_id` BIGINT NOT NULL,
@@ -419,6 +396,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`StoreSpaces` (
     FOREIGN KEY (`space_type_id`)
     REFERENCES `Merkadit`.`SpaceTypes` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -426,8 +404,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`POSTerminals`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`POSTerminals` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`POSTerminals` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(60) NOT NULL,
@@ -443,6 +419,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`POSTerminals` (
     FOREIGN KEY (`storeSpace_id`)
     REFERENCES `Merkadit`.`StoreSpaces` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -450,8 +427,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Shifts`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Shifts` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Shifts` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `terminal_id` BIGINT NOT NULL,
@@ -478,8 +453,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`CashDrawerSessions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`CashDrawerSessions` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`CashDrawerSessions` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `shift_id` BIGINT NOT NULL,
@@ -502,14 +475,13 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`ContractStatus`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`ContractStatus` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`ContractStatus` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -517,8 +489,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Contracts`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Contracts` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Contracts` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `business_id` BIGINT NOT NULL,
@@ -543,6 +513,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Contracts` (
     FOREIGN KEY (`storeSpace_id`)
     REFERENCES `Merkadit`.`StoreSpaces` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 22
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -550,8 +521,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`ContractFeeRules`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`ContractFeeRules` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`ContractFeeRules` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `contract_id` BIGINT NOT NULL,
@@ -580,8 +549,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`ContractSpaces`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`ContractSpaces` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`ContractSpaces` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `contract_id` BIGINT NOT NULL,
@@ -608,8 +575,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Customers`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Customers` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Customers` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(190) NULL DEFAULT NULL,
@@ -617,6 +582,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Customers` (
   `phone` VARCHAR(60) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 9
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -624,8 +590,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`DiscountTypes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`DiscountTypes` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`DiscountTypes` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(30) NOT NULL,
@@ -633,6 +597,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`DiscountTypes` (
   `active` BIT(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -640,8 +605,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Discounts`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Discounts` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Discounts` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `Businesses_id` BIGINT NOT NULL,
@@ -681,8 +644,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`DiscountProducts`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`DiscountProducts` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`DiscountProducts` (
   `Discounts_id` INT NOT NULL,
   `id` INT NOT NULL,
@@ -704,14 +665,13 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`InvoiceStatus`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`InvoiceStatus` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`InvoiceStatus` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` ENUM('ISSUED', 'VOIDED', 'RETURNED') NOT NULL DEFAULT 'ISSUED',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -719,8 +679,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Sales`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Sales` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Sales` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `business_id` BIGINT NULL DEFAULT NULL,
@@ -760,6 +718,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Sales` (
     FOREIGN KEY (`pos_terminal_id`)
     REFERENCES `Merkadit`.`POSTerminals` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 495
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -767,8 +726,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`DiscountUsage`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`DiscountUsage` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`DiscountUsage` (
   `Discounts_id` INT NOT NULL,
   `id` INT NOT NULL,
@@ -797,8 +754,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`FinancialTransactions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`FinancialTransactions` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`FinancialTransactions` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `direction` ENUM('IN', 'OUT') NOT NULL,
@@ -829,6 +784,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`FinancialTransactions` (
     FOREIGN KEY (`business_id`)
     REFERENCES `Merkadit`.`Businesses` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 21
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -836,8 +792,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`FinancialTransactionLines`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`FinancialTransactionLines` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`FinancialTransactionLines` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `financialTransaction_id` BIGINT NOT NULL,
@@ -860,6 +814,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`FinancialTransactionLines` (
     FOREIGN KEY (`financialTransaction_id`)
     REFERENCES `Merkadit`.`FinancialTransactions` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 21
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -867,8 +822,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`InventoryItems`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`InventoryItems` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`InventoryItems` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `storeSpace_id` BIGINT NOT NULL,
@@ -888,6 +841,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`InventoryItems` (
     FOREIGN KEY (`storeSpace_id`)
     REFERENCES `Merkadit`.`StoreSpaces` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -895,14 +849,13 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`InventoryTransactionTypes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`InventoryTransactionTypes` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`InventoryTransactionTypes` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 22
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -910,8 +863,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`InventoryTransactions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`InventoryTransactions` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`InventoryTransactions` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `storeSpace_id` BIGINT NOT NULL,
@@ -939,6 +890,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`InventoryTransactions` (
     FOREIGN KEY (`type_id`)
     REFERENCES `Merkadit`.`InventoryTransactionTypes` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 15
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -946,8 +898,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Investments`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Investments` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Investments` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `building_id` BIGINT NULL DEFAULT NULL,
@@ -967,8 +917,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`nv_logslevel`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`nv_logslevel` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`nv_logslevel` (
   `loglevelid` INT NOT NULL AUTO_INCREMENT,
   `loglevelname` VARCHAR(30) NOT NULL,
@@ -979,6 +927,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`nv_logslevel` (
     FOREIGN KEY (`UserAccounts_id`)
     REFERENCES `Merkadit`.`UserAccounts` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 16
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -986,8 +935,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`OperationLogs`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`OperationLogs` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`OperationLogs` (
   `operationlogid` BIGINT NOT NULL AUTO_INCREMENT,
   `operation_name` VARCHAR(120) NOT NULL,
@@ -1006,6 +953,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`OperationLogs` (
     FOREIGN KEY (`loglevelid`)
     REFERENCES `Merkadit`.`nv_logslevel` (`loglevelid`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 25
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -1013,14 +961,13 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`PaymentTypes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`PaymentTypes` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`PaymentTypes` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -1028,8 +975,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`PaymentFromCustomers`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`PaymentFromCustomers` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`PaymentFromCustomers` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `sale_id` BIGINT NOT NULL,
@@ -1047,6 +992,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`PaymentFromCustomers` (
     FOREIGN KEY (`sale_id`)
     REFERENCES `Merkadit`.`Sales` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 20
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -1054,8 +1000,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Permissions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Permissions` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Permissions` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(100) NOT NULL,
@@ -1070,8 +1014,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`PriceLists`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`PriceLists` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`PriceLists` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `storeSpace_id` BIGINT NOT NULL,
@@ -1084,6 +1026,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`PriceLists` (
     FOREIGN KEY (`storeSpace_id`)
     REFERENCES `Merkadit`.`StoreSpaces` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -1091,8 +1034,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`PriceListItems`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`PriceListItems` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`PriceListItems` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `price_list_id` BIGINT NOT NULL,
@@ -1109,6 +1050,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`PriceListItems` (
     FOREIGN KEY (`product_id`)
     REFERENCES `Merkadit`.`Products` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -1116,8 +1058,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Receipts`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Receipts` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Receipts` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `sale_id` BIGINT NOT NULL,
@@ -1140,6 +1080,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Receipts` (
     FOREIGN KEY (`sale_id`)
     REFERENCES `Merkadit`.`Sales` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 20
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -1147,8 +1088,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`RentSchedules`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`RentSchedules` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`RentSchedules` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `contract_id` BIGINT NOT NULL,
@@ -1172,8 +1111,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`ReportingPeriods`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`ReportingPeriods` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`ReportingPeriods` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `period_year` INT NOT NULL,
@@ -1190,8 +1127,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Roles`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Roles` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Roles` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
@@ -1208,8 +1143,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`RolePermissions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`RolePermissions` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`RolePermissions` (
   `role_id` BIGINT NOT NULL,
   `permission_id` BIGINT NOT NULL,
@@ -1229,8 +1162,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`SaleLines`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`SaleLines` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`SaleLines` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `sale_id` BIGINT NOT NULL,
@@ -1255,6 +1186,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`SaleLines` (
     FOREIGN KEY (`sale_id`)
     REFERENCES `Merkadit`.`Sales` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 493
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -1262,8 +1194,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`SaleLineDiscounts`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`SaleLineDiscounts` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`SaleLineDiscounts` (
   `Discounts_id` INT NOT NULL,
   `Discounts_DiscountTypes_id` INT NOT NULL,
@@ -1287,8 +1217,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`Settlements`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`Settlements` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`Settlements` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `contract_id` BIGINT NOT NULL,
@@ -1316,6 +1244,7 @@ CREATE TABLE IF NOT EXISTS `Merkadit`.`Settlements` (
     FOREIGN KEY (`posted_by_userId`)
     REFERENCES `Merkadit`.`UserAccounts` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 11
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -1323,8 +1252,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`SettlementAdjustments`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`SettlementAdjustments` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`SettlementAdjustments` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `settlement_id` BIGINT NOT NULL,
@@ -1355,8 +1282,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`UserAffiliations`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`UserAffiliations` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`UserAffiliations` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `userId` BIGINT NOT NULL,
@@ -1388,8 +1313,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`UserRoles`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`UserRoles` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`UserRoles` (
   `user_id` BIGINT NOT NULL,
   `role_id` BIGINT NOT NULL,
@@ -1409,8 +1332,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`nv_logsources`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`nv_logsources` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`nv_logsources` (
   `logsourceid` INT NOT NULL AUTO_INCREMENT,
   `sourcename` VARCHAR(30) NOT NULL,
@@ -1428,8 +1349,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `Merkadit`.`nv_logtypes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Merkadit`.`nv_logtypes` ;
-
 CREATE TABLE IF NOT EXISTS `Merkadit`.`nv_logtypes` (
   `logtypeid` INT NOT NULL AUTO_INCREMENT,
   `logtypename` VARCHAR(30) NOT NULL,
@@ -1443,409 +1362,19 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+USE `Merkadit` ;
+
+-- -----------------------------------------------------
+-- Placeholder table for view `Merkadit`.`vw_BusinessReport`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Merkadit`.`vw_BusinessReport` (`business_id` INT, `business_name` INT, `legal_business_name` INT, `business_type` INT, `store_space_id` INT, `store_space_code` INT, `building_name` INT, `building_id` INT, `contract_id` INT, `fee_percentage` INT, `monthly_rent` INT, `sale_year` INT, `sale_month` INT, `period` INT, `total_sales_count` INT, `total_items_sold` INT, `subtotal_amount` INT, `discount_amount` INT, `tax_amount` INT, `total_sales_amount` INT, `fee_amount` INT, `rent_amount` INT, `total_due_marketplace` INT, `total_to_business` INT, `settlement_status` INT, `settlement_id` INT, `settlement_date` INT, `first_sale_date` INT, `last_sale_date` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `Merkadit`.`vw_TopProducts`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Merkadit`.`vw_TopProducts` (`id` INT);
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
--- -------------------------------------------------------------------------------------------------------
--- Inserts
--- -------------------------------------------------------------------------------------------------------
--- 0. 1 marketplace (administrador)
-INSERT INTO Marketplace (commercial_name, legal_name, tax_id, email, phone, created_at, deleted) 
-VALUES ('MK1', 'Administrador Merkadit', '188590576', 'merkadit@gmail.com', '6424-8809', NOW(), 0);
-
--- 1. 2 edificios de ese marketplace
-INSERT INTO Buildings (marketplace_id, name, created_at, code)
-VALUES (1, 'Mall San Pedro', NOW(), 'MSP-A'), (1, 'Multiplaza Curridabat', NOW(), 'MPCB-B');
-
--- 2. Un local en el primer edificio y 2 en el segundo (requiere registrar spaceTypes y spaceStatus)
-INSERT INTO SpaceTypes (name) VALUES ('GASTRONOMIC'), ('RETAIL'), ('TECH');
-INSERT INTO SpaceStatus (name) VALUES ('AVAILABLE'),('NOT AVAILABLE'),('OCCUPIED');
-
-INSERT INTO StoreSpaces (building_id, code, space_type_id, space_status_id, size_m2, level_number, zone, notes, created_at, deleted)
-VALUES 
-	(1, 'A-01', 1, 1, 25.00, 1, 'Ala Este', 'Sin notas', NOW(), 0),
-    (2, 'B-01', 2, 1, 25.00, 2, 'Segundo piso, ala Sur', 'Sin notas', NOW(), 0),
-    (2, 'B-02', 1, 1, 25.00, 1, 'Food Court', 'Sin notas', NOW(), 0);
-
--- 3. 4-7 negocios por local (hay que insertar business types y 5 negocios por local)
-	INSERT INTO BusinessTypes (name) VALUES ('Restaurant'),('Clothing Store'),('Electronics Shop'),('Bakery'),('Coffee Shop');
-	-- Local A 
-	INSERT INTO Businesses (business_type_id, legal_name, trade_name, tax_id, email, phone, created_at, deleted)
-	VALUES
-		(1, 'Tienda A1', 'Tienda A1', '877569932', 'a1@gmail.com', '6635-9976', NOW(), 0),
-		(2, 'Tienda A2', 'Tienda A2', '991874923', 'a2@gmail.com', '0011-2233', NOW(), 0),
-		(3, 'Tienda A3', 'Tienda A3', '881112223', 'a3@gmail.com', '2222-3333', NOW(), 0),
-		(4, 'Tienda A4', 'Tienda A4', '882223334', 'a4@gmail.com', '3333-4444', NOW(), 0),
-		(5, 'Tienda A5', 'Tienda A5', '883334445', 'a5@gmail.com', '4444-5555', NOW(), 0);
-		
-	-- Local B (5 negocios)
-	INSERT INTO Businesses (business_type_id, legal_name, trade_name, tax_id, email, phone, created_at, deleted)
-	VALUES
-		(1, 'Tienda B1', 'Tienda B1', '884445556', 'b1@gmail.com', '5555-6666', NOW(), 0),
-		(2, 'Tienda B2', 'Tienda B2', '885556667', 'b2@gmail.com', '6666-7777', NOW(), 0),
-		(3, 'Tienda B3', 'Tienda B3', '886667778', 'b3@gmail.com', '7777-8888', NOW(), 0),
-		(4, 'Tienda B4', 'Tienda B4', '887778889', 'b4@gmail.com', '8888-9999', NOW(), 0),
-		(5, 'Tienda B5', 'Tienda B5', '888889990', 'b5@gmail.com', '9999-0000', NOW(), 0);
-
-	-- Local C (5 negocios)
-	INSERT INTO Businesses (business_type_id, legal_name, trade_name, tax_id, email, phone, created_at, deleted)
-	VALUES
-		(1, 'Tienda C1', 'Tienda C1', '889990001', 'c1@gmail.com', '1111-2222', NOW(), 0),
-		(2, 'Tienda C2', 'Tienda C2', '890001112', 'c2@gmail.com', '2222-3333', NOW(), 0),
-		(3, 'Tienda C3', 'Tienda C3', '891112223', 'c3@gmail.com', '3333-4444', NOW(), 0),
-		(4, 'Tienda C4', 'Tienda C4', '892223334', 'c4@gmail.com', '4444-5555', NOW(), 0),
-		(5, 'Tienda C5', 'Tienda C5', '893334445', 'c5@gmail.com', '5555-6666', NOW(), 0);
-
--- 4. Contratos para cada negocio asociando con su respectivo espacio físico 
-	-- Catálogo de estados
-    INSERT INTO ContractStatus (name) VALUES ('ACTIVE'), ('SUSPENDED'), ('TERMINATED')
-	ON DUPLICATE KEY UPDATE name = VALUES(name);
-    
-    -- IDs de apoyo para los 3 locales y estado ACTIVE
-    SELECT id INTO @sp_A  FROM StoreSpaces WHERE code='A-01';
-	SELECT id INTO @sp_B1 FROM StoreSpaces WHERE code='B-01';
-	SELECT id INTO @sp_B2 FROM StoreSpaces WHERE code='B-02';
-    SELECT id INTO @st_active FROM ContractStatus WHERE name='ACTIVE';
-    
-    -- Ahora sí los contratos, 1 por negocio
-	-- Local A
-    INSERT INTO Contracts  (business_id, contract_status_id, storeSpace_id, start_date, end_date, base_monthly_rent, sales_fee_percent, settlement_day)
-    VALUES
-		((SELECT id FROM Businesses WHERE trade_name='Tienda A1'), @st_active, @sp_A, '2025-01-01', NULL, 300000, 5.00, 10),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda A2'), @st_active, @sp_A, '2025-02-01', NULL, 280000, 6.00, 15),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda A3'), @st_active, @sp_A, '2025-02-15', NULL, 250000, 5.00, 12),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda A4'), @st_active, @sp_A, '2025-03-01', NULL, 260000, 7.00, 20),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda A5'), @st_active, @sp_A, '2025-03-10', NULL, 270000, 8.00, 25);
-
-	-- Local B
-	INSERT INTO Contracts (business_id, contract_status_id, storeSpace_id, start_date, end_date, base_monthly_rent, sales_fee_percent, settlement_day)
-	VALUES	
-		((SELECT id FROM Businesses WHERE trade_name='Tienda B1'), @st_active, @sp_B1, '2025-01-20', NULL, 200000, 5.00, 10),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda B2'), @st_active, @sp_B1, '2025-02-05', NULL, 220000, 6.00, 15),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda B3'), @st_active, @sp_B1, '2025-02-25', NULL, 210000, 5.00, 12),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda B4'), @st_active, @sp_B1, '2025-03-01', NULL, 230000, 7.00, 20),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda B5'), @st_active, @sp_B1, '2025-03-05', NULL, 240000, 8.00, 25);
-	
-    -- Local C
-    INSERT INTO Contracts (business_id, contract_status_id, storeSpace_id, start_date, end_date, base_monthly_rent, sales_fee_percent, settlement_day)
-	VALUES
-		((SELECT id FROM Businesses WHERE trade_name='Tienda C1'), @st_active, @sp_B2, '2025-01-15', NULL, 180000, 5.00, 10),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda C2'), @st_active, @sp_B2, '2025-02-01', NULL, 190000, 6.00, 15),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda C3'), @st_active, @sp_B2, '2025-02-20', NULL, 200000, 5.00, 12),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda C4'), @st_active, @sp_B2, '2025-03-01', NULL, 210000, 7.00, 20),
-		((SELECT id FROM Businesses WHERE trade_name='Tienda C5'), @st_active, @sp_B2, '2025-03-08', NULL, 220000, 8.00, 25);
-
-
--- 5. Inventario para 3 negocios aleatorios con diferentes productos y categorías
-	-- Primero hay q insertar categorías de productos
-    INSERT INTO ProductCategories (name, created_at, deleted)
-	VALUES
-		('Bebidas', NOW(), 0),
-		('Comida', NOW(), 0),
-		('Accesorios', NOW(), 0);
-        
-
-	INSERT INTO Brands (name) VALUES ('Genérico');
-    INSERT INTO UnitOfMeasure (code, name) VALUES ('UND', 'Unidad');
-    
-    -- IDs auxiliares
-	SET @cat_beb:=(SELECT id FROM ProductCategories WHERE name='Bebidas');
-    SET @cat_com:=(SELECT id FROM ProductCategories WHERE name='Comidas');
-    SET @cat_acc:=(SELECT id FROM ProductCategories WHERE name='Accesorios');
-    SET @brand:=(SELECT id FROM Brands WHERE name='Genérico');
-    SET @uom:=(SELECT id FROM UnitOfMeasure WHERE name='Unidad');
-    
-    SET @biz_A1:=(SELECT id FROM Businesses WHERE trade_name='Tienda A1');
-    SET @biz_B1:=(SELECT id FROM Businesses WHERE trade_name='Tienda B1');
-    SET @biz_c1:=(SELECT id FROM Businesses WHERE trade_name='Tienda C1');
-    
-    -- Terminales por local
-	SET @pos_A:=(SELECT id FROM POSTerminals WHERE storeSpace_id = @sp_A);
-	SET @pos_B1:=(SELECT id FROM POSTerminals WHERE storeSpace_id = @sp_B1);
-    
-	INSERT INTO POSTerminals (code, is_active, storeSpace_id)
-	VALUES 
-		('A01-T1', 1, @sp_A),
-		('B01-T1', 1, @sp_B1);
-
-    
-	INSERT INTO Products (business_id, category_id, brand_id, uom_id, sku, name, description, active)
-	VALUES
-		(@biz_A1, @cat_beb, @brand, @uom, 'A1-BEB-001', 'Refresco Cola', 'Bebida 355 ml', 1),
-		(@biz_B1, @cat_com, @brand, @uom, 'B1-COM-001', 'Hamburguesa', 'Clásica 120 g', 1),
-		(@biz_C1, @cat_acc, @brand, @uom, 'C1-ACC-001', 'Llavero souvenir', 'Metal grabado', 1);
-	
-    SET @prod_a := (SELECT id FROM Products WHERE sku='A1-BEB-001');
-	SET @prod_b := (SELECT id FROM Products WHERE sku='B1-COM-001');
-	SET @prod_c := (SELECT id FROM Products WHERE sku='C1-ACC-001');
-
-	-- Una lista de precios por local
-	INSERT INTO PriceLists (storeSpace_id, name, valid_from)
-	VALUES
-		(@sp_A , 'Lista A-01',  DATE_SUB(CURDATE(), INTERVAL 6 MONTH)),
-		(@sp_B1, 'Lista B-01',  DATE_SUB(CURDATE(), INTERVAL 6 MONTH)),
-		(@sp_B2, 'Lista B-02',  DATE_SUB(CURDATE(), INTERVAL 6 MONTH));
-
-	SET @pl_A:=(SELECT id FROM PriceLists WHERE storeSpace_id=@sp_A  ORDER BY valid_from DESC);
-	SET @pl_B1:=(SELECT id FROM PriceLists WHERE storeSpace_id=@sp_B1 ORDER BY valid_from DESC);
-	SET @pl_B2:=(SELECT id FROM PriceLists WHERE storeSpace_id=@sp_B2 ORDER BY valid_from DESC);
-    
-    -- Ítems de la lista con costos/precios de venta
-	INSERT INTO PriceListItems (price_list_id, product_id, cost_price, selling_price)
-	VALUES
-		(@pl_A , @prod_a, 700.00, 1200.00),
-		(@pl_B1, @prod_b, 1500.00, 2500.00),
-		(@pl_B2, @prod_c, 800.00, 1500.00);
-
-	-- Para usar luego en ventas
-	SET @price_a := (SELECT selling_price FROM PriceListItems WHERE product_id=@prod_a ORDER BY price_list_id DESC LIMIT 1);
-	SET @price_b := (SELECT selling_price FROM PriceListItems WHERE product_id=@prod_b ORDER BY price_list_id DESC LIMIT 1);
-	SET @price_c := (SELECT selling_price FROM PriceListItems WHERE product_id=@prod_c ORDER BY price_list_id DESC LIMIT 1);
-    
-	-- Stock inicial alto en el local correspondiente
-	INSERT INTO InventoryItems (storeSpace_id, product_id, quantity_on_hand, created_at, deleted)
-	VALUES
-		(@sp_A , @prod_a, 2000, NOW(), 0),
-		(@sp_B1, @prod_b, 2000, NOW(), 0),
-		(@sp_B2, @prod_c, 2000, NOW(), 0);
-
--- Añadir ventas por los últimos 4 meses
-DELIMITER //
-DROP PROCEDURE IF EXISTS generate_sales_for_month//
-CREATE PROCEDURE generate_sales_for_month(
-    IN p_business_id     BIGINT,
-    IN p_pos_terminal_id BIGINT,
-    IN p_storeSpace_id   BIGINT,
-    IN p_product_id      BIGINT,
-    IN p_unit_price      DECIMAL(12,2),
-    IN p_year            INT,
-    IN p_month           INT,
-    IN p_sales_count     INT
-)
-BEGIN
-    DECLARE v_done INT DEFAULT 0;
-    DECLARE v_qty INT;
-    DECLARE v_sale_dt DATETIME;
-    DECLARE v_sale_id BIGINT;
-
-    DECLARE v_month_start DATE;
-    DECLARE v_month_end   DATE;
-    DECLARE v_days INT;
-
-    DECLARE v_stock DECIMAL(14,3);
-
-    DECLARE v_contract_id BIGINT;
-    DECLARE v_invoice_status_id BIGINT DEFAULT NULL;
-    DECLARE v_user_id BIGINT DEFAULT 1;
-    DECLARE v_customer_id BIGINT DEFAULT NULL;
-
-    DECLARE v_subtotal DECIMAL(14,2);
-    DECLARE v_discount DECIMAL(14,2);
-    DECLARE v_tax      DECIMAL(14,2);
-    DECLARE v_total    DECIMAL(14,2);
-
-    -- Calcular inicio y fin del mes
-    SET v_month_start = STR_TO_DATE(CONCAT(p_year,'-',LPAD(p_month,2,'0'),'-01'), '%Y-%m-%d');
-    SET v_month_end   = LAST_DAY(v_month_start);
-    SET v_days        = DATEDIFF(v_month_end, v_month_start) + 1;
-
-    sales_loop: WHILE v_done < p_sales_count DO
-        -- Fecha y cantidad aleatorias
-        SET v_sale_dt = TIMESTAMP(
-            DATE_ADD(v_month_start, INTERVAL FLOOR(RAND()*v_days) DAY), 
-            SEC_TO_TIME(FLOOR(RAND()*86400))
-        );
-        SET v_qty = 1 + FLOOR(RAND()*5);
-
-        -- Verificar stock disponible
-        SELECT quantity_on_hand INTO v_stock
-        FROM InventoryItems
-        WHERE storeSpace_id = p_storeSpace_id 
-          AND product_id = p_product_id
-        LIMIT 1;  -- Agregar LIMIT por seguridad
-
-        IF v_stock IS NULL OR v_stock <= 0 THEN
-            SET v_done = v_done + 1; 
-            ITERATE sales_loop;
-        END IF;
-        
-        IF v_qty > v_stock THEN 
-            SET v_qty = FLOOR(v_stock); 
-        END IF;
-        
-        IF v_qty = 0 THEN 
-            SET v_done = v_done + 1; 
-            ITERATE sales_loop; 
-        END IF;
-
-        -- Buscar contrato vigente (CORREGIDO: agregado LIMIT 1)
-        SELECT c.id INTO v_contract_id
-        FROM Contracts c 
-        WHERE c.business_id = p_business_id 
-          AND c.storeSpace_id = p_storeSpace_id 
-          AND (c.end_date IS NULL OR c.end_date >= DATE(v_sale_dt)) 
-          AND c.start_date <= DATE(v_sale_dt)
-        ORDER BY c.start_date DESC
-        LIMIT 1;  -- FIX: Tomar solo el contrato más reciente
-
-        -- Si no hay contrato, saltar esta venta
-        IF v_contract_id IS NULL THEN
-            SET v_done = v_done + 1;
-            ITERATE sales_loop;
-        END IF;
-
-        -- Estado de factura (CORREGIDO: agregado LIMIT 1)
-        SELECT id INTO v_invoice_status_id 
-        FROM InvoiceStatus 
-        WHERE name = 'ISSUED'
-        LIMIT 1;  -- FIX: Tomar solo un estado
-        
-        IF v_invoice_status_id IS NULL THEN 
-            SET v_invoice_status_id = 1; 
-        END IF;
-
-        -- Calcular importes
-        SET v_subtotal = ROUND(p_unit_price * v_qty, 2);
-        SET v_discount = 0.00;
-        SET v_tax      = ROUND(v_subtotal * 0.13, 2);
-        SET v_total    = v_subtotal - v_discount + v_tax;
-
-        -- Insertar encabezado de venta
-        INSERT INTO Sales (
-            business_id, pos_terminal_id, customer_id, contract_id,invoice_status_id, business_day, sale_datetime, 
-            subtotal_amount, discount_amount, tax_amount, total_amount, post_time, posted_by_userId, computer, 
-            checksum
-        )
-        VALUES (p_business_id, p_pos_terminal_id, v_customer_id, v_contract_id, v_invoice_status_id,
-            DATE(v_sale_dt), v_sale_dt, v_subtotal, v_discount, v_tax, v_total, v_sale_dt, v_user_id, 'SEED', 
-            SHA2(CONCAT(p_business_id, p_product_id, UNIX_TIMESTAMP(v_sale_dt), v_total), 256)
-        );
-
-        SET v_sale_id = LAST_INSERT_ID();
-
-        -- Insertar detalle de venta
-        INSERT INTO SaleLines (
-            sale_id, product_id,quantity, unit_price, discount_amount, line_total, unit_price_atSale, tax_atSale, created_at
-        )
-        VALUES (
-            v_sale_id, p_product_id, v_qty, p_unit_price, 0.00, v_subtotal, p_unit_price, v_tax, NOW()
-        );
-
-        -- Descontar del inventario
-        UPDATE InventoryItems
-        SET quantity_on_hand = quantity_on_hand - v_qty,
-            updated_at = NOW()
-        WHERE storeSpace_id = p_storeSpace_id 
-          AND product_id = p_product_id;
-
-        SET v_done = v_done + 1;
-    END WHILE sales_loop;
-END//
-
-DELIMITER ;
-
-DELIMITER ;
--- A1 vende en A-01
-CALL generate_sales_for_month(@biz_A1, @pos_A,  @sp_A,  @prod_a, @price_a, 2025, 9, 60);
-CALL generate_sales_for_month(@biz_A1, @pos_A,  @sp_A,  @prod_a, @price_a, 2025, 8, 55);
-CALL generate_sales_for_month(@biz_A1, @pos_A,  @sp_A,  @prod_a, @price_a, 2025, 7, 67);
-CALL generate_sales_for_month(@biz_A1, @pos_A,  @sp_A,  @prod_a, @price_a, 2025, 6, 52);
-
--- B1 vende en B-01
-CALL generate_sales_for_month(@biz_B1, @pos_B1, @sp_B1, @prod_b, @price_b, 2025, 9, 58);
-CALL generate_sales_for_month(@biz_B1, @pos_B1, @sp_B1, @prod_b, @price_b, 2025, 8, 62);
-CALL generate_sales_for_month(@biz_B1, @pos_B1, @sp_B1, @prod_b, @price_b, 2025, 7, 50);
-CALL generate_sales_for_month(@biz_B1, @pos_B1, @sp_B1, @prod_b, @price_b, 2025, 6, 69);
-
-
--- 1. Tipos de transacción de inventario
-INSERT INTO InventoryTransactionTypes (name) VALUES 
-('SALE'),
-('PURCHASE'),
-('ADJUSTMENT'),
-('RETURN'),
-('DAMAGE'),
-('TRANSFER'),
-('INITIAL_STOCK');
-
-
--- 2. Estados de espacios
-INSERT INTO SpaceStatus (name) VALUES 
-('UNDER_RENOVATION'),
-('RESERVED'),
-('MAINTENANCE');
-
--- 3. Tipos de espacios
-INSERT INTO SpaceTypes (name) VALUES 
-('FOOD_STALL'),
-('KIOSK'),
-('RETAIL_STORE'),
-('RESTAURANT'),
-('CAFE'),
-('CONVENIENCE_STORE');
-
--- 4. Tipos de descuento
-INSERT INTO DiscountTypes (name, description, active) VALUES 
-('Porcentaje', 'Descuento basado en porcentaje', 1),
-('Monto_fijo', 'Descuento de monto fijo', 1),
-('Compra_x_lleva_y', 'Promoción de compra x y lleva y', 1),
-('Paquete', 'Descuento por paquete', 1);
-
--- 5. Estados de factura
-INSERT INTO InvoiceStatus (name) VALUES 
-('ISSUED'),
-('VOIDED'),
-('RETURNED');
-
--- 6. Tipos de negocio
-INSERT INTO BusinessTypes (name) VALUES 
-('GASTRONOMIC'),
-('RETAIL'),
-('SERVICE'),
-('MIXED');
-
--- 7. Tipos de pago
-INSERT INTO PaymentTypes (name) VALUES 
-('CASH'),
-('CREDIT_CARD'),
-('DEBIT_CARD'),
-('BANK_TRANSFER'),
-('MOBILE_PAYMENT'),
-('CHECK');
-
-
--- 8. Unidades de medida
-INSERT INTO UnitOfMeasure (code, name) VALUES 
-('UN', 'Unit'),
-('KG', 'Kilogram'),
-('LB', 'Pound'),
-('L', 'Liter'),
-('ML', 'Milliliter'),
-('G', 'Gram'),
-('OZ', 'Ounce'),
-('DOZ', 'Dozen'),
-('PK', 'Package'),
-('BX', 'Box');
-
--- 9. Marcas comunes
-INSERT INTO Brands (name) VALUES 
-('Premium'),
-('Economico'),
-('Organico');
-
-
--- Niveles de log
-INSERT INTO nv_logslevel (loglevelname, useraccounts_id) VALUES 
-('Depuración', 1),
-('Información', 1),
-('Advertencia', 1),
-('Error', 1),
-('Crítico', 1);
-
-INSERT INTO Roles (Id, name, description, created_at, updated_at) 
-VALUES 
-(1, 'Admin', 'Usuario con privilegios de administrador', '2025-09-30 04:01:28', '2025-09-30 04:01:28'),
-(2, 'User', 'Usuario estándar con acceso limitado', '2025-09-30 04:01:28', '2025-09-30 04:01:28');
-
