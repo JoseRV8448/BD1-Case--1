@@ -9,7 +9,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from handlers.sales_handler import sales_bp
-from handlers.settlement_handler import settlement_bp  # ✅ AGREGAR ESTO
+from handlers.settlement_handler import settlement_bp
 from utils.logger import setup_logger
 
 logger = setup_logger('app')
@@ -25,7 +25,7 @@ CORS(app)
 
 # Registrar blueprints
 app.register_blueprint(sales_bp)
-app.register_blueprint(settlement_bp)  # ✅ AGREGAR ESTO
+app.register_blueprint(settlement_bp)
 
 # Log de rutas registradas
 logger.info("=== RUTAS REGISTRADAS ===")
